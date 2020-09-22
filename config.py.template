@@ -1,0 +1,4 @@
+""" Template Config. Please edit these values. """
+BOT_TOKEN = ""
+POSTGRESQL_DSN = ""
+EXTENSIONS = []

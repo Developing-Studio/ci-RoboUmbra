@@ -1,0 +1,18 @@
+{
+    "apps": [
+        {
+            "name": "R. Umbra",
+            "cwd": "/home/penumbra/sideprojs/r.umbra/",
+            "script": "bot.py",
+            "autorestart": true,
+            "max_restart": 5,
+            "instances": 1,
+            "interpreter": "/home/penumbra/.poetry/bin/poetry",
+            "interpreter_args": [
+                "run",
+                "python"
+            ],
+            "log_date_format": "DD-MM-YYYY HH:mm:ss"
+        }
+    ]
+}
