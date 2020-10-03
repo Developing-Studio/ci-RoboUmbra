@@ -43,16 +43,16 @@ class Umbra(commands.Cog):
 
     @_jsk.command(name="eval", aliases=["py", "dev"])
     async def _eval(self, ctx: commands.Context, *, command_body: codeblock_converter) -> discord.Message:
-        return await self.bot.get_command("jishaku python")(ctx, command_body)
+        return await self.bot.get_command("jishaku python")(ctx, argument=command_body)
 
     @_jsk.command(name="os", aliases=["system"])
     async def _system(self, ctx: commands.Context, *, shell_body: codeblock_converter) -> discord.Message:
-        return await self.bot.get_command("jishaku shell")(ctx, shell_body)
+        return await self.bot.get_command("jishaku shell")(ctx, argument=shell_body)
 
     @_jsk.command(name="broke", aliases=["debug"])
     async def _debug(self, ctx: commands.Context, *, command_string: str) -> discord.Message:
         """ Debugs a command. Disables all local error handling and returns the error. """
-        return await self.bot.get_command("jishaku debug")(ctx, command_string)
+        return await self.bot.get_command("jishaku debug")(ctx, command_string=command_string)
 
     @commands.group(name="cogs", aliases=["cog", "extensions"], invoke_without_command=True)
     async def _cogs(self, ctx: commands.Context) -> discord.Message:
