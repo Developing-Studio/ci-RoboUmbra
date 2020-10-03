@@ -7,7 +7,8 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-"discord.py" = "^1.4.1"
+"discord.py" = {git = "https://github.com/Rapptz/discord.py"}
+discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus"}
 wavelink = "^0.9.6"
 jishaku = "^1.19.1"
 

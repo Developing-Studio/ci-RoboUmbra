@@ -21,9 +21,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
+import asyncio
 import datetime
 import logging
-import os
 import traceback
 from contextlib import contextmanager
 
@@ -33,10 +33,6 @@ import wavelink
 from discord.ext import commands
 
 import config
-
-os.environ["JISHAKU_HIDE"] = "True"
-os.environ["JISHAKU_RETAIN"] = "True"
-os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 
 class RoboUmbra(commands.Bot):
     """
@@ -54,11 +50,12 @@ class RoboUmbra(commands.Bot):
                         'jishaku': jishaku.__version__} #pylint: disable=no-member
         self.config = config
         self.description = self.__doc__
-        self.loop.create_task(self.owner_call_once())
         self.emoji = {True: "<:TickYes:735498312861351937>",
                       False: "<:CrossNo:735498453181923377>",
                       None: "<:QuestionMaybe:738038828928860269>"}
         self.ignored_exceptions = (commands.CommandNotFound,)
+        self.loop.create_task(self.owner_setter())
+        self.add_check(self.owner_call)
 
         for extension in config.EXTENSIONS:
             try:
@@ -67,9 +64,15 @@ class RoboUmbra(commands.Bot):
                 traceback.print_exc()
                 continue
 
-    async def owner_call_once(self):
+    async def owner_setter(self):
+        """ A quick coro to set the bot's owner. """
         await self.wait_until_ready()
-        self.owner_id = (await self.application_info()).owner.id
+        if not self.owner_id:
+            self.owner_id = (await self.application_info()).owner.id
+
+    async def owner_call(self, ctx: commands.Context):
+        """ Bot check. """
+        return await self.is_owner(ctx.author)
 
     async def _exception_handle(self, exception: Exception):
         exception_fmt = traceback.format_exception(type(exception), exception, exception.__traceback__, 4)
@@ -79,17 +82,21 @@ class RoboUmbra(commands.Bot):
         await self.get_user(self.owner_id).send(embed=embed)
 
     async def on_ready(self):
-        return print(f"Logged in :: {self.user.name} & {self.user.id}")
+        """ Robo Umbra is alive and working. """
+        await asyncio.sleep(5)
+        return print(f"Logged in :: {self.user.name} & {self.user.id} with owner {self.owner_id}")
 
     async def prefix(self, bot: commands.Bot, message: discord.Message):
-        ## TODO:
+        """ Return my prefixes. """
         return commands.when_mentioned_or(">:")(bot, message)
 
     async def on_message(self, message: discord.Message):
+        """ Overridden message event. """
         if message.author.id == self.owner_id:
             await self.process_commands(message)
 
     async def on_message_edit(self, _: discord.Message, after: discord.Message):
+        """ Process commands after edit too. """
         if after.author.id == self.owner_id:
             await self.process_commands(after)
 
@@ -99,10 +106,13 @@ class RoboUmbra(commands.Bot):
         if isinstance(error, self.ignored_exceptions):
             await ctx.message.add_reaction(self.emoji[None])
             return
+        else:
+            raise error
 
 
 @contextmanager
 def setup_logging():
+    """ Setup my logger. """
     try:
         logging.getLogger('discord').setLevel(logging.INFO)
         logging.getLogger('discord.http').setLevel(logging.WARNING)
@@ -127,6 +137,7 @@ def setup_logging():
 
 
 def run_bot():
+    """ Start the bot. """
     bot = RoboUmbra()
     bot.run(config.BOT_TOKEN)
 
