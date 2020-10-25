@@ -11,6 +11,7 @@ python = "^3.8"
 discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus"}
 wavelink = "^0.9.6"
 jishaku = "^1.19.1"
+"mystbin.py" = "^0.3.3"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.6.0"

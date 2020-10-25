@@ -81,7 +81,7 @@ description = "Bash-style brace expansion for Python"
 name = "braceexpand"
 optional = false
 python-versions = "*"
-version = "0.1.5"
+version = "0.1.6"
 
 [[package]]
 category = "main"
@@ -115,6 +115,7 @@ version = "1.0.0a26+g84caae8"
 reference = "84caae8038d0d3adc860957ccef05baeec2e2dd8"
 type = "git"
 url = "https://github.com/Rapptz/discord-ext-menus"
+
 [[package]]
 category = "main"
 description = "A Python wrapper for the Discord API"
@@ -131,9 +132,10 @@ docs = ["sphinx (1.8.5)", "sphinxcontrib_trio (1.1.1)", "sphinxcontrib-websuppor
 voice = ["PyNaCl (1.3.0)"]
 
 [package.source]
-reference = "1066f42f1f73ba3e98b2572957738bbf4b21bab2"
+reference = "f308f34db1b1c24178fbdb1756838064cd9e4348"
 type = "git"
 url = "https://github.com/Rapptz/discord.py"
+
 [[package]]
 category = "main"
 description = "Python humanize utilities"
@@ -176,7 +178,7 @@ description = "A Python utility / library to sort Python imports."
 name = "isort"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "5.5.4"
+version = "5.6.2"
 
 [package.extras]
 colors = ["colorama (>=0.4.3,<0.5.0)"]
@@ -226,6 +228,20 @@ name = "multidict"
 optional = false
 python-versions = ">=3.5"
 version = "4.7.6"
+
+[[package]]
+category = "main"
+description = "A small simple wrapper around the mystb.in API."
+name = "mystbin.py"
+optional = false
+python-versions = ">=3.6,<4.0"
+version = "0.3.3"
+
+[package.dependencies]
+aiohttp = ">=3.6.2,<4.0.0"
+
+[package.extras]
+requests = ["requests (>=2.24.0,<3.0.0)"]
 
 [[package]]
 category = "dev"
@@ -310,7 +326,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "1b2a2273f5471fe5d925cd08dce9b47ba03f81e9f4e47e8cdea4392f990e1bca"
+content-hash = "616c40ba8793d9996cea784772d2ddb9bdc7b42d2e3e121ed54a1109f756568a"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -349,8 +365,8 @@ autopep8 = [
     {file = "autopep8-1.5.4.tar.gz", hash = "sha256:d21d3901cb0da6ebd1e83fc9b0dfbde8b46afc2ede4fe32fbda0c7c6118ca094"},
 ]
 braceexpand = [
-    {file = "braceexpand-0.1.5-py2.py3-none-any.whl", hash = "sha256:ae6b7de1e88d3132177bd6cbda8b22487ea645b25c4ca5b1cf948b326ac27e34"},
-    {file = "braceexpand-0.1.5.tar.gz", hash = "sha256:d3d932030c3ab4740b33df68a58d70f3a10368f33b3a56eb951da649bec0bb52"},
+    {file = "braceexpand-0.1.6-py2.py3-none-any.whl", hash = "sha256:c37571ad130213247fac9921f3fd1032c81057490b9ca29be6884fd6d9dc1013"},
+    {file = "braceexpand-0.1.6.tar.gz", hash = "sha256:c1bf4fdc1713e46feacac0f1acbbb12239bdda7c7c4183fc8fb22bf6f285f854"},
 ]
 chardet = [
     {file = "chardet-3.0.4-py2.py3-none-any.whl", hash = "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"},
@@ -375,8 +391,8 @@ import-expression = [
     {file = "import_expression-1.1.4.tar.gz", hash = "sha256:06086a6ab3bfa528b1c478e633d6adf2b3a990e31440f6401b0f3ea12b0659a9"},
 ]
 isort = [
-    {file = "isort-5.5.4-py3-none-any.whl", hash = "sha256:36f0c6659b9000597e92618d05b72d4181104cf59472b1c6a039e3783f930c95"},
-    {file = "isort-5.5.4.tar.gz", hash = "sha256:ba040c24d20aa302f78f4747df549573ae1eaf8e1084269199154da9c483f07f"},
+    {file = "isort-5.6.2-py3-none-any.whl", hash = "sha256:a30c567b88d7b73e448b0f30526eaf2f943f0627809e4f34b9c3271918d96c3e"},
+    {file = "isort-5.6.2.tar.gz", hash = "sha256:c2cfe5b621f62932677004f96f93c4b128dc457d957b0531f204641fe8adc8a6"},
 ]
 jishaku = [
     {file = "jishaku-1.19.1.200-py3-none-any.whl", hash = "sha256:39ddc1dd1239025e4992bc9d81c1c456938800c6e27c04d6e877cac1cf741376"},
@@ -431,6 +447,10 @@ multidict = [
     {file = "multidict-4.7.6-cp38-cp38-win32.whl", hash = "sha256:5cf311a0f5ef80fe73e4f4c0f0998ec08f954a6ec72b746f3c179e37de1d210d"},
     {file = "multidict-4.7.6-cp38-cp38-win_amd64.whl", hash = "sha256:7388d2ef3c55a8ba80da62ecfafa06a1c097c18032a501ffd4cabbc52d7f2b19"},
     {file = "multidict-4.7.6.tar.gz", hash = "sha256:fbb77a75e529021e7c4a8d4e823d88ef4d23674a202be4f5addffc72cbb91430"},
+]
+"mystbin.py" = [
+    {file = "mystbin.py-0.3.3-py3-none-any.whl", hash = "sha256:2748e80e1aaf236a42fe7879ed044c95b018ea522cde18233e0a520670289709"},
+    {file = "mystbin.py-0.3.3.tar.gz", hash = "sha256:a0e7f4b3116044628d742d2d315026ad431b919d9605ab100da0ce7f1b89f3fd"},
 ]
 pycodestyle = [
     {file = "pycodestyle-2.6.0-py2.py3-none-any.whl", hash = "sha256:2295e7b2f6b5bd100585ebcb1f616591b652db8a741695b3d8f5d28bdc934367"},

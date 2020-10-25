@@ -27,12 +27,15 @@ import logging
 import traceback
 from contextlib import contextmanager
 
+import aiohttp
 import discord
 import jishaku
+import mystbin
 import wavelink
 from discord.ext import commands
 
 import config
+
 
 class RoboUmbra(commands.Bot):
     """
@@ -42,6 +45,7 @@ class RoboUmbra(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(command_prefix=self.prefix,
                          allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False),
+                         intents=discord.Intents.all(),
                          activity=discord.Activity(
                              type=discord.ActivityType.listening, name="Umbral Shadows"),
                          **kwargs)
@@ -54,8 +58,11 @@ class RoboUmbra(commands.Bot):
                       False: "<:CrossNo:735498453181923377>",
                       None: "<:QuestionMaybe:738038828928860269>"}
         self.ignored_exceptions = (commands.CommandNotFound,)
-        self.loop.create_task(self.owner_setter())
+        self.loop.create_task(self.funky_shit())
         self.add_check(self.owner_call)
+
+        self.session = None
+        self.mb_client = None
 
         for extension in config.EXTENSIONS:
             try:
@@ -64,11 +71,15 @@ class RoboUmbra(commands.Bot):
                 traceback.print_exc()
                 continue
 
-    async def owner_setter(self):
+    async def funky_shit(self):
         """ A quick coro to set the bot's owner. """
         await self.wait_until_ready()
         if not self.owner_id:
             self.owner_id = (await self.application_info()).owner.id
+        if not self.session:
+            self.session = aiohttp.ClientSession()
+        if not self.mb_client:
+            self.mb_client = mystbin.MystbinClient(session=self.session)
 
     async def owner_call(self, ctx: commands.Context):
         """ Bot check. """

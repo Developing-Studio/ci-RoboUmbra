@@ -37,16 +37,24 @@ class Umbra(commands.Cog):
     async def cog_check(self, ctx: commands.Context) -> bool: #pylint: disable=invalid-overridden-method
         return await ctx.bot.is_owner(ctx.author)
 
+    @commands.command(aliases=['join'])
+    async def invite(self, ctx: commands.Context) -> discord.Message:
+        """ Sends a bot invite. """
+        return await ctx.send(discord.utils.oauth_url(self.bot.user.id))
+
     @commands.group(name="robo", aliases=["r"], invoke_without_command=True)
     async def _jsk(self, ctx: commands.Context) -> discord.Message:
+        """ Presents details about R. Umbra in the current channel. """
         return await self.bot.get_command("jishaku")(ctx)
 
     @_jsk.command(name="eval", aliases=["py", "dev"])
     async def _eval(self, ctx: commands.Context, *, command_body: codeblock_converter) -> discord.Message:
+        """ Returns direct evaluation of Python code within R. Umbra. """
         return await self.bot.get_command("jishaku python")(ctx, argument=command_body)
 
     @_jsk.command(name="os", aliases=["system"])
     async def _system(self, ctx: commands.Context, *, shell_body: codeblock_converter) -> discord.Message:
+        """ Returns direct evaluation of shell commands from R. Umbra's OS. """
         return await self.bot.get_command("jishaku shell")(ctx, argument=shell_body)
 
     @_jsk.command(name="broke", aliases=["debug"])
@@ -54,8 +62,9 @@ class Umbra(commands.Cog):
         """ Debugs a command. Disables all local error handling and returns the error. """
         return await self.bot.get_command("jishaku debug")(ctx, command_string=command_string)
 
-    @commands.group(name="cogs", aliases=["cog", "extensions"], invoke_without_command=True)
+    @commands.group(name="exts", aliases=["cogs", "extensions"], invoke_without_command=True)
     async def _cogs(self, ctx: commands.Context) -> discord.Message:
+        """ Main command for Extension manipulation. """
         embed = discord.Embed(title="R. Umbra's loaded cogs.")
         embed.description = formats.to_codeblock("\n".join(map(str, self.bot.cogs)))
         embed.timestamp = datetime.datetime.utcnow()
@@ -63,16 +72,19 @@ class Umbra(commands.Cog):
 
     @_cogs.command(name="load", aliases=["start", "enable"])
     async def _load(self, ctx: commands.Context, *, cog_name: str):
+        """ Load a new extension. """
         self.bot.load_extension(f"cogs.{cog_name.lower()}")
         return await ctx.message.add_reaction(self.bot.emoji[True])
 
     @_cogs.command(name="unload", aliases=["stop", "disable"])
     async def _unload(self, ctx: commands.Context, *, cog_name: str):
+        """ Unload a loaded extension. """
         self.bot.unload_extension(f"cogs.{cog_name.lower()}")
         return await ctx.message.add_reaction(self.bot.emoji[True])
 
     @_cogs.command(name="reload", aliases=["restart"])
     async def _reload(self, ctx: commands.Context, *, cog_name: str):
+        """ Reload a loaded extension. """
         cog = f"cogs.{cog_name.lower()}"
         try:
             self.bot.reload_extension(cog)
