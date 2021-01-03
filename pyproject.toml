@@ -7,15 +7,16 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-"discord.py" = {git = "https://github.com/Rapptz/discord.py"}
-discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus"}
-wavelink = "^0.9.6"
-jishaku = "^1.19.1"
-"mystbin.py" = "^0.3.3"
+"discord.py" = { git = "https://github.com/Rapptz/discord.py", rev = "master" }
+discord-ext-menus = { git = "https://github.com/Rapptz/discord-ext-menus", rev = "master" }
+jishaku = { git = "https://github.com/Gorialis/jishaku", rev = "master" }
+wavelink = "*"
+"mystbin.py" = "*"
+"discord.py-stubs" = "^1.5.1"
 
 [tool.poetry.dev-dependencies]
-pylint = "^2.6.0"
-autopep8 = "^1.5.4"
+black = "*"
+flake8 = "*"
 
 [build-system]
 requires = ["poetry>=0.12"]

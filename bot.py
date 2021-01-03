@@ -42,21 +42,33 @@ class RoboUmbra(commands.Bot):
     Robotic Umbra, what more could you want?
     Umbra#0009, but only speaks when spoken to.
     """
+
     def __init__(self, *args, **kwargs):
-        super().__init__(command_prefix=self.prefix,
-                         allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False),
-                         intents=discord.Intents.all(),
-                         activity=discord.Activity(
-                             type=discord.ActivityType.listening, name="Umbral Shadows"),
-                         **kwargs)
-        self.version = {'discord.py': discord.__version__,
-                        'wavelink': wavelink.__version__,
-                        'jishaku': jishaku.__version__} #pylint: disable=no-member
+        super().__init__(
+            command_prefix=self.prefix,
+            allowed_mentions=discord.AllowedMentions(
+                everyone=False, users=False, roles=False
+            ),
+            intents=discord.Intents.all(),
+            activity=discord.Activity(
+                type=discord.ActivityType.listening, name="Umbral Shadows"
+            ),
+            **kwargs,
+        )
+        self.version = {
+            "discord.py": discord.__version__,
+            "wavelink": wavelink.__version__,
+            "jishaku": jishaku.__version__,
+        }
         self.config = config
+        self.owner_id = None
+        self.owner_ids = config.OWNER_IDS
         self.description = self.__doc__
-        self.emoji = {True: "<:TickYes:735498312861351937>",
-                      False: "<:CrossNo:735498453181923377>",
-                      None: "<:QuestionMaybe:738038828928860269>"}
+        self.emoji = {
+            True: "<:TickYes:735498312861351937>",
+            False: "<:CrossNo:735498453181923377>",
+            None: "<:QuestionMaybe:738038828928860269>",
+        }
         self.ignored_exceptions = (commands.CommandNotFound,)
         self.loop.create_task(self.funky_shit())
         self.add_check(self.owner_call)
@@ -74,19 +86,21 @@ class RoboUmbra(commands.Bot):
     async def funky_shit(self):
         """ A quick coro to set the bot's owner. """
         await self.wait_until_ready()
-        if not self.owner_id:
-            self.owner_id = (await self.application_info()).owner.id
+        # if not self.owner_id:
+        #     self.owner_id = (await self.application_info()).owner.id
         if not self.session:
             self.session = aiohttp.ClientSession()
         if not self.mb_client:
-            self.mb_client = mystbin.MystbinClient(session=self.session)
+            self.mb_client = mystbin.Client(session=self.session)
 
     async def owner_call(self, ctx: commands.Context):
         """ Bot check. """
         return await self.is_owner(ctx.author)
 
     async def _exception_handle(self, exception: Exception):
-        exception_fmt = traceback.format_exception(type(exception), exception, exception.__traceback__, 4)
+        exception_fmt = traceback.format_exception(
+            type(exception), exception, exception.__traceback__, 4
+        )
         embed = discord.Embed(title="Error Chief.")
         embed.description = f"```py\n{''.join(exception_fmt)}\n```"
         embed.timestamp = datetime.datetime.utcnow()
@@ -95,7 +109,9 @@ class RoboUmbra(commands.Bot):
     async def on_ready(self):
         """ Robo Umbra is alive and working. """
         await asyncio.sleep(5)
-        return print(f"Logged in :: {self.user.name} & {self.user.id} with owner {self.owner_id}")
+        return print(
+            f"Logged in :: {self.user.name} & {self.user.id} with owner {self.owner_id}"
+        )
 
     async def prefix(self, bot: commands.Bot, message: discord.Message):
         """ Return my prefixes. """
@@ -103,12 +119,12 @@ class RoboUmbra(commands.Bot):
 
     async def on_message(self, message: discord.Message):
         """ Overridden message event. """
-        if message.author.id == self.owner_id:
+        if message.author.id in self.owner_ids:
             await self.process_commands(message)
 
     async def on_message_edit(self, _: discord.Message, after: discord.Message):
         """ Process commands after edit too. """
-        if after.author.id == self.owner_id:
+        if after.author.id in self.owner_ids:
             await self.process_commands(after)
 
     async def on_command_error(self, ctx: commands.Context, error: Exception):
@@ -125,16 +141,16 @@ class RoboUmbra(commands.Bot):
 def setup_logging():
     """ Setup my logger. """
     try:
-        logging.getLogger('discord').setLevel(logging.INFO)
-        logging.getLogger('discord.http').setLevel(logging.WARNING)
+        logging.getLogger("discord").setLevel(logging.INFO)
+        logging.getLogger("discord.http").setLevel(logging.WARNING)
 
         log = logging.getLogger()
         log.setLevel(logging.INFO)
-        handler = logging.FileHandler(
-            filename='RUmbra.log', encoding='utf-8', mode='w')
-        dt_fmt = '%Y-%m-%d %H:%M:%S'
+        handler = logging.FileHandler(filename="RUmbra.log", encoding="utf-8", mode="w")
+        dt_fmt = "%Y-%m-%d %H:%M:%S"
         fmt = logging.Formatter(
-            '[{asctime}] [{levelname:<7}] {name}: {message}', dt_fmt, style='{')
+            "[{asctime}] [{levelname:<7}] {name}: {message}", dt_fmt, style="{"
+        )
         handler.setFormatter(fmt)
         log.addHandler(handler)
 
@@ -151,6 +167,7 @@ def run_bot():
     """ Start the bot. """
     bot = RoboUmbra()
     bot.run(config.BOT_TOKEN)
+
 
 with setup_logging():
     run_bot()
